@@ -4,17 +4,21 @@ using ContactsApp.ViewModels;
 using ContactsApp.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Prism.Services;
+using ContactsApp.Data;
+using ContactsApp.Helpers;
+using ContactsApp.Bussiness;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ContactsApp
 {
     public partial class App
     {
-        /* 
-         * The Xamarin Forms XAML Previewer in Visual Studio uses System.Activator.CreateInstance.
-         * This imposes a limitation in which the App class must have a default constructor. 
-         * App(IPlatformInitializer initializer = null) cannot be handled by the Activator.
-         */
+        string DbPath => FileHelper.GetLocalFilePath("people.db3");
+        public static PersonRepository PersonRepo { get; private set; }
+        public static DataService DataService { get; private set; }
+        public static bool IsLogged { get; internal set; }
+
         public App() : this(null) { }
 
         public App(IPlatformInitializer initializer) : base(initializer) { }
@@ -22,14 +26,23 @@ namespace ContactsApp
         protected override async void OnInitialized()
         {
             InitializeComponent();
-
-            await NavigationService.NavigateAsync("NavigationPage/MainPage");
+            IsLogged =  await UserProcess.IsLoggued();
+            PersonRepo = new PersonRepository(DbPath);
+            DataService = new DataService();
+            if (IsLogged)
+            {
+                await NavigationService.NavigateAsync("http://myapp.com/" + nameof(NavigationPage) +"/"+ nameof(ContactsListPage));
+            }
+            else await NavigationService.NavigateAsync("http://myapp.com/" + nameof(NavigationPage) +"/"+nameof(LoginPage));
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
+            containerRegistry.RegisterForNavigation<ContactsListPage, ContactsListViewModel>();
+            containerRegistry.RegisterForNavigation<ContactDetailPage, ContactDetailViewModel>();
+            containerRegistry.Register<IPageDialogService, PageDialogService>();
         }
     }
 }

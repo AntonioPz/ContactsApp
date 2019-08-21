@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ContactsApp.Views.ContactDetailPage"
+              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid Margin="0,0,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Grid.RowSpan="3" Grid.Row="0" Source="{Binding Person.ImageURL}" Aspect="AspectFill"/>
+                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Person.FullName}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <Label Grid.Row="1" Grid.Column="1" Text="{Binding Person.Email}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
+                    <Image  Source="fivestars"  Aspect="AspectFill" />
+                    <Label  Text="{Binding Person.Rating}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
+                </StackLayout>
+            </Grid>
+            <Label Text="Dirección:" Font="Medium"  TextColor="LightSeaGreen" LineBreakMode="TailTruncation"></Label>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Calle: " Font="Small,Bold"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <Label Text="{Binding Person.Street}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Ciudad: " Font="Small,Bold"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <Label Text="{Binding Person.City}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Estado: " Font="Small,Bold"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <Label Text="{Binding Person.State}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Código postal: " Font="Small,Bold"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <Label Text="{Binding Person.PostalCode}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Teléfono: " Font="Small,Bold"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <Label Text="{Binding Person.PhoneNumber}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,10,0,10">
+                <Label Text="Ubicación: " Font="Medium"  TextColor="LightSeaGreen" LineBreakMode="TailTruncation"></Label>
+            </StackLayout>
+            <Grid>
+                <maps:Map x:Name="map" WidthRequest="200" HeightRequest="200" >
+                    
+                </maps:Map>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

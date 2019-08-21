@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             x:Class="ContactsApp.Views.ContactsListPage"
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Salir" Command="{Binding LogoutCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <ListView x:Name="ItemsListView"
+                ItemsSource="{Binding People, Mode=OneWay}"
+                SelectedItem="{Binding Person}"
+                VerticalOptions="FillAndExpand"
+                HasUnevenRows="true"
+                CachingStrategy="RecycleElement">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"></RowDefinition>
+                                <RowDefinition Height="15"></RowDefinition>
+                                <RowDefinition Height="15"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="{Binding ImageURL}" Aspect="AspectFill"/>
+
+                            <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                                <Label Text="{Binding FullName}" LineBreakMode="TailTruncation"></Label>
+                                <Label Text="{Binding Rating}" LineBreakMode="TailTruncation" Margin="10,0,0,0"></Label>
+                            </StackLayout>
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Email}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
+                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Street}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Behaviors>
+                <b:EventToCommandBehavior EventName="ItemTapped" 
+                                          Command="{Binding TapCommand}" />
+            </ListView.Behaviors>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>
