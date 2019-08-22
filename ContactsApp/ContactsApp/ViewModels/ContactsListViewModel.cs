@@ -7,6 +7,7 @@ using Prism.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -35,6 +36,7 @@ namespace ContactsApp.ViewModels
         public ContactsListViewModel(INavigationService navigationService, IPageDialogService pageDialogService) : base(navigationService, pageDialogService)
         {
             Title = "Contactos";
+            People = new ObservableCollection<Person>();
             LogoutCommand = new DelegateCommand(Logout);
             TapCommand = new DelegateCommand(PersonTapped);
             LoadPeopleCommand = new Command(async () => await LoadPeople());
@@ -43,53 +45,10 @@ namespace ContactsApp.ViewModels
 
         private async Task LoadPeople()
         {
-            try
-            {
-                var people = await App.DataService.GetPeople(5);
-                int count = people.Results.Count;
-                foreach (var item in people.Results)
-                {
-                    Person = new Person()
-                    {
-                        FullName = string.Format("{0} {1} {2}", item.Name.Title, item.Name.First, item.Name.Last),
-                        City = item.Location.City,
-                        ImageURL = item.Picture.Medium,
-                        Email = item.Email,
-                        Latitude = item.Location.Coordinates.Latitude,
-                        Longitude = item.Location.Coordinates.Longitude,
-                        PhoneNumber = item.Phone,
-                        PostalCode = Convert.ToInt32(item.Location.Postcode),
-                        Rating = GenerateRating(),
-                        State = item.Location.State,
-                        Street = item.Location.Street
-
-                    };
-                    await App.PersonRepo.AddAsync(Person);
-
-                }
-                People = new ObservableCollection<Person>(await App.PersonRepo.GetLastItems(5));
-            }
-            catch (Exception)
-            {
-            }
-            
+            await App.DataService.GetAndSavePeople(5);
+            People = await App.PersonRepo.GetLast(5);
         }
 
-        private double GenerateRating()
-        {
-            int sum = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                sum += RandomNumber(1,6);
-            }
-            return (double)sum / 10;
-        }
-        Random random = new Random(Guid.NewGuid().GetHashCode());
-
-        public int RandomNumber(int min, int max)
-        {
-            return random.Next(min, max);
-        }
 
         private async void PersonTapped()
         {
@@ -97,6 +56,7 @@ namespace ContactsApp.ViewModels
             {
                 { "personId", Person.Id }
             };
+            Person = new Person();
             await NavigationService.NavigateAsync(nameof(ContactDetailPage), valuePairs);
         }
 

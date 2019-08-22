@@ -5,7 +5,7 @@
               xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              Title="{Binding Title}">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="10">
             <Grid Margin="0,0,0,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"/>
@@ -17,11 +17,11 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0" Grid.RowSpan="3" Grid.Row="0" Source="{Binding Person.ImageURL}" Aspect="AspectFill"/>
-                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Person.FullName}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
+                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Person.FullName}" Font="Bold"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
                 <Label Grid.Row="1" Grid.Column="1" Text="{Binding Person.Email}" Font="Small"  TextColor="Black" LineBreakMode="TailTruncation"></Label>
                 <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
-                    <Image  Source="fivestars"  Aspect="AspectFill" />
-                    <Label  Text="{Binding Person.Rating}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
+                    <Image  Source="fivestars" Aspect="AspectFill" />
+                    <Label Text="{Binding Person.Rating}" TextColor="Gray" LineBreakMode="TailTruncation"></Label>
                 </StackLayout>
             </Grid>
             <Label Text="Dirección:" Font="Medium"  TextColor="LightSeaGreen" LineBreakMode="TailTruncation"></Label>
@@ -49,8 +49,14 @@
                 <Label Text="Ubicación: " Font="Medium"  TextColor="LightSeaGreen" LineBreakMode="TailTruncation"></Label>
             </StackLayout>
             <Grid>
-                <maps:Map x:Name="map" WidthRequest="200" HeightRequest="200" >
-                    
+                <maps:Map x:Name="map" WidthRequest="200" HeightRequest="200" ItemsSource="{Binding Locations, Mode=OneWay}">
+                    <maps:Map.ItemTemplate>
+                        <DataTemplate>
+                            <maps:Pin Position="{Binding Position}"
+                              Address="{Binding Address}"
+                              Label="{Binding Description}" />
+                        </DataTemplate>
+                    </maps:Map.ItemTemplate>
                 </maps:Map>
             </Grid>
         </StackLayout>

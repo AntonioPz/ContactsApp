@@ -1,9 +1,7 @@
 ﻿using ContactsApp.Helpers;
 using ContactsApp.Models;
-using ContactsApp.Services;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
@@ -11,9 +9,12 @@ using System.Threading.Tasks;
 
 namespace ContactsApp.Data
 {
-    public class DataService : IRestService<PeopleDTO>
+    public class DataService 
     {
         HttpClient _client;
+
+        public Person Person { get; private set; }
+
         public DataService()
         {
             _client = new HttpClient();
@@ -40,7 +41,7 @@ namespace ContactsApp.Data
             return loginDTO;
         }
 
-        public async Task<PeopleDTO> GetPeople(int count)
+        public async Task GetAndSavePeople(int count)
         {
             PeopleDTO result = new PeopleDTO();
 
@@ -58,8 +59,27 @@ namespace ContactsApp.Data
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
+            foreach (var item in result.Results)
+            {
+                Person = new Person()
+                {
+                    FullName = string.Format("{0} {1} {2}", item.Name.Title, item.Name.First, item.Name.Last),
+                    City = item.Location.City,
+                    ImageURL = item.Picture.Medium,
+                    Email = item.Email,
+                    Latitude = item.Location.Coordinates.Latitude,
+                    Longitude = item.Location.Coordinates.Longitude,
+                    PhoneNumber = item.Phone,
+                    PostalCode = Convert.ToInt32(item.Location.Postcode),
+                    Rating = Operations.GenerateRating(),
+                    State = item.Location.State,
+                    Street = item.Location.Street
 
-            return result;
+                };
+                await App.PersonRepo.AddAsync(Person);
+            }
+
         }
+        
     }
 }

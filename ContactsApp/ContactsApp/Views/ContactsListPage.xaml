@@ -12,7 +12,7 @@
     <ContentPage.Content>
         <ListView x:Name="ItemsListView"
                 ItemsSource="{Binding People, Mode=OneWay}"
-                SelectedItem="{Binding Person}"
+                SelectedItem="{Binding Person, Mode=TwoWay}"
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"
                 CachingStrategy="RecycleElement">
@@ -22,23 +22,25 @@
                     <ViewCell>
                         <Grid Padding="5">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="20"></RowDefinition>
-                                <RowDefinition Height="15"></RowDefinition>
-                                <RowDefinition Height="15"></RowDefinition>
+                                <RowDefinition Height="18"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="{Binding ImageURL}" Aspect="AspectFill"/>
+                            <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="{Binding ImageURL}" Margin="0,8"  Aspect="AspectFill"/>
 
                             <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                                <Label Text="{Binding FullName}" LineBreakMode="TailTruncation"></Label>
-                                <Label Text="{Binding Rating}" LineBreakMode="TailTruncation" Margin="10,0,0,0"></Label>
+                                <Label Text="{Binding FullName}" Font="Bold"  LineBreakMode="TailTruncation"></Label>
+                                <Image  Source="onestar"  Aspect="AspectFill" Margin="10,0,0,0"/>
+                                <Label Text="{Binding Rating}" LineBreakMode="TailTruncation" ></Label>
                             </StackLayout>
-                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Email}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
-                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Street}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
+                            <StackLayout Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+                                 <Label Text="{Binding Email}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
+                                 <Label Text="{Binding Street}" Font="Small"  TextColor="Gray" LineBreakMode="TailTruncation"></Label>
+                            </StackLayout>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

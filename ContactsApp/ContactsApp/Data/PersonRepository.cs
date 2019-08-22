@@ -3,6 +3,7 @@ using ContactsApp.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace ContactsApp.Data
@@ -88,7 +89,7 @@ namespace ContactsApp.Data
 
             return new List<Person>();
         }
-        public async Task<List<Person>> GetLastItems(int count )
+        public async Task<List<Person>> GetLastItems(int count)
         {
             try
             {
@@ -100,6 +101,20 @@ namespace ContactsApp.Data
             }
 
             return new List<Person>();
+        }
+        public async Task<ObservableCollection<Person>> GetLast(int count)
+        {
+            List<Person> list = new List<Person>();
+            try
+            {
+                list = await conn.Table<Person>().OrderByDescending(p => p.Id).Take(count).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = string.Format("Failed to retrieve data. Error: {0}", ex.Message);
+            }
+
+            return new ObservableCollection<Person>(list);
         }
 
 

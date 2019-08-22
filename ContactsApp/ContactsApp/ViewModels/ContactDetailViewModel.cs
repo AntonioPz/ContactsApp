@@ -3,6 +3,7 @@ using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Xamarin.Forms.Maps;
 
@@ -17,10 +18,16 @@ namespace ContactsApp.ViewModels
             get => person;
             set => SetProperty(ref person, value);
         }
-
+        private ObservableCollection<Location> locations;
+        public ObservableCollection<Location> Locations
+        {
+            get => locations;
+            set => SetProperty(ref locations, value);
+        }
         public ContactDetailViewModel(INavigationService navigationService, IPageDialogService pageDialogService) : base(navigationService, pageDialogService)
         {
             Title = "Detalles de contacto";
+            Locations = new ObservableCollection<Location>();
         }
         public async override void OnNavigatingTo(INavigationParameters parameters)
         {
@@ -30,14 +37,8 @@ namespace ContactsApp.ViewModels
                 Person = await App.PersonRepo.GetAsync(personId);
 
                 var position = new Position(double.Parse(Person.Latitude), double.Parse(Person.Longitude)); // Latitude, Longitude
-                var pin = new Pin
-                {
-                    Type = PinType.Place,
-                    Position = position,
-                    Label = "custom pin",
-                    Address = "custom detail info"
-                };
 
+                Locations = new ObservableCollection<Location>() { new Location() { Position = position, Address = Person.City, Description = Person.Street} };
             }
         }
     }
