@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace ContactsApp.Bussiness
 {
@@ -14,7 +11,12 @@ namespace ContactsApp.Bussiness
                 IsValid = true,
                 Message = string.Empty
             };
-            if (!ValidatePattern(email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
+            if (string.IsNullOrEmpty(email))
+            {
+                result.IsValid = false;
+                result.Message = "¡Ingresa tu correo!";
+            }
+            else if (!ValidatePattern(email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
             {
                 result.IsValid = false;
                 result.Message = "¡Ingresa un correro válido!";

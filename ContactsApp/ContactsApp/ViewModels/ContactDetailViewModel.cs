@@ -27,7 +27,7 @@ namespace ContactsApp.ViewModels
         public ContactDetailViewModel(INavigationService navigationService, IPageDialogService pageDialogService) : base(navigationService, pageDialogService)
         {
             Title = "Detalles de contacto";
-            Locations = new ObservableCollection<Location>();
+            Locations = new ObservableCollection<Location>() { new Location() { Position=new Position(0,0), Address=string.Empty, Description=string.Empty} };
         }
         public async override void OnNavigatingTo(INavigationParameters parameters)
         {

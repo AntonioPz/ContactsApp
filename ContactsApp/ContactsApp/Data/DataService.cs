@@ -3,6 +3,7 @@ using ContactsApp.Models;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,10 +42,8 @@ namespace ContactsApp.Data
             return loginDTO;
         }
 
-        public async Task GetAndSavePeople(int count)
+        public async Task GetPeopleAsync(int count)
         {
-            PeopleDTO result = new PeopleDTO();
-
             var uri = new Uri(string.Format("{0}/?results={1}", Constants.PEOPLE_URL, count.ToString()));
             try
             {
@@ -52,34 +51,34 @@ namespace ContactsApp.Data
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<PeopleDTO>(content);
+                    var result = JsonConvert.DeserializeObject<PeopleDTO>(content);
+                    var people = (from item in result.Results
+                                  select new Person()
+                                  {
+                                      FullName = string.Format("{0} {1} {2}", item.Name.Title, item.Name.First, item.Name.Last),
+                                      City = item.Location.City,
+                                      ImageURL = item.Picture.Medium,
+                                      Email = item.Email,
+                                      Latitude = item.Location.Coordinates.Latitude,
+                                      Longitude = item.Location.Coordinates.Longitude,
+                                      PhoneNumber = item.Phone,
+                                      PostalCode = Convert.ToInt32(item.Location.Postcode),
+                                      Rating = Operations.GenerateRating(),
+                                      State = item.Location.State,
+                                      Street = item.Location.Street
+                                  });
+                    foreach (var person in people)
+                    {
+                        await App.PersonRepo.AddAsync(person);
+                    }
                 }
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
-            foreach (var item in result.Results)
-            {
-                Person = new Person()
-                {
-                    FullName = string.Format("{0} {1} {2}", item.Name.Title, item.Name.First, item.Name.Last),
-                    City = item.Location.City,
-                    ImageURL = item.Picture.Medium,
-                    Email = item.Email,
-                    Latitude = item.Location.Coordinates.Latitude,
-                    Longitude = item.Location.Coordinates.Longitude,
-                    PhoneNumber = item.Phone,
-                    PostalCode = Convert.ToInt32(item.Location.Postcode),
-                    Rating = Operations.GenerateRating(),
-                    State = item.Location.State,
-                    Street = item.Location.Street
-
-                };
-                await App.PersonRepo.AddAsync(Person);
-            }
-
         }
-        
+
     }
 }

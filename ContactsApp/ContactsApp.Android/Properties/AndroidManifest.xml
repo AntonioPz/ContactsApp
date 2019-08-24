@@ -13,7 +13,7 @@
 	<uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" />
 	<uses-permission android:name="android.permission.LOCATION_HARDWARE" />
 	<uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER" />
-	<application android:label="ContactsApp.Android" android:icon="@mipmap/ic_launcher">
+	<application android:label="Mis Contactos" android:icon="@mipmap/ic_launcher">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAYqYSSchi23DNGKu2LXO3eNXv2qhXcpgE" />
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 		<uses-library android:name="org.apache.http.legacy" android:required="false" />

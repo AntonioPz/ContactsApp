@@ -1,14 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ContactsApp.Controls"
              x:Class="ContactsApp.Views.LoginPage"
              >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <OnPlatform x:TypeArguments="x:String" x:Key="Courgette">
+                <On Platform="Android" Value="Courgette-Regular.ttf#Courgette Regular" />
+                <On Platform="iOS" Value="Courgette-Regular" />
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="Font" x:Key="TitleFont">
+                <On Platform="Android" Value="35" />
+                <On Platform="iOS" Value="25" />
+            </OnPlatform>
+            
+            <Color x:Key="LightGreenColor">#2FA999</Color>
+            <Color x:Key="BorderColor">#D8D8D8</Color>
+
+            <Style x:Key="LableStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="#666666" />
+                <Setter Property="FontSize" Value="Large" />
+            </Style>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
+            </Style>
+            <Style x:Key="EntryStyle" TargetType="Entry">
+                <Setter Property="HeightRequest" Value="40"></Setter>
+                <Setter Property="Margin" Value="5,0,0,0"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout Spacing="20" Padding="25" VerticalOptions="Center">
-            <Label HorizontalOptions="CenterAndExpand" Text="Mis Contactos" FontAttributes="Bold" FontSize="Large" Margin="0,0,0,30"/>
-            <Entry Placeholder="Email" Text="{Binding Email, Mode=TwoWay}"></Entry>
-            <Entry Placeholder="Password" Text="{Binding Password, Mode=TwoWay}" IsPassword="True"></Entry>
-            <Button Text="Log In" TextColor="DodgerBlue" Margin="0,25,0,0" Command="{Binding LoginCommand}"></Button>
+        <ScrollView>
+            <StackLayout Margin="20,0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <!--<Image Margin="0,0,0,30" Source="banner1"></Image>-->
+            <Label HorizontalOptions="CenterAndExpand" Text="Mis Contactos" FontAttributes="Bold" Font="{StaticResource TitleFont}" TextColor="{StaticResource LightGreenColor}"  Margin="0,0,0,60"  FontFamily="{StaticResource Courgette}" />
+
+            <Frame HasShadow="False" CornerRadius="5" BorderColor="{StaticResource BorderColor}" BackgroundColor="#F7F7F7">
+
+                <StackLayout>
+                    <Label Style="{StaticResource LableStyle}" Text="Email" />
+                    <Frame Style="{StaticResource FrameStyle}">
+                        <controls:CustomEntry Text="{Binding Email, Mode=TwoWay}" Style="{StaticResource EntryStyle}"></controls:CustomEntry>
+                    </Frame>
+                    <Label Style="{StaticResource LableStyle}" Text="Password"></Label>
+                    <Frame Style="{StaticResource FrameStyle}">
+                        <controls:CustomEntry IsPassword="True" Text="{Binding Password, Mode=TwoWay}" Style="{StaticResource EntryStyle}"></controls:CustomEntry>
+                    </Frame>
+                    <Button Margin="100,20" Command="{Binding LoginCommand}" BorderRadius="6" WidthRequest="200" TextColor="White" BackgroundColor="{StaticResource LightGreenColor}" Text="Login"></Button>
+                </StackLayout>
+            </Frame>
         </StackLayout>
+        </ScrollView>
+
     </ContentPage.Content>
 </ContentPage>

@@ -31,7 +31,6 @@ namespace ContactsApp.ViewModels
         }
         public DelegateCommand LogoutCommand { get; private set; }
         public DelegateCommand TapCommand { get; private set; }
-        public Command LoadPeopleCommand { get; private set; }
 
         public ContactsListViewModel(INavigationService navigationService, IPageDialogService pageDialogService) : base(navigationService, pageDialogService)
         {
@@ -39,14 +38,12 @@ namespace ContactsApp.ViewModels
             People = new ObservableCollection<Person>();
             LogoutCommand = new DelegateCommand(Logout);
             TapCommand = new DelegateCommand(PersonTapped);
-            LoadPeopleCommand = new Command(async () => await LoadPeople());
-            LoadPeopleCommand.Execute(null);
-        }
 
-        private async Task LoadPeople()
-        {
-            await App.DataService.GetAndSavePeople(5);
-            People = await App.PersonRepo.GetLast(5);
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await App.DataService.GetPeopleAsync(5);
+                People = await App.PersonRepo.GetLast(5);
+            });
         }
 
 
@@ -66,6 +63,5 @@ namespace ContactsApp.ViewModels
             userProcess.Logout();
             await NavigationService.NavigateAsync(new Uri(string.Format("http://myapp.com/{0}/{1}", nameof(NavigationPage), nameof(LoginPage)), UriKind.Absolute));
         }
-
     }
 }
